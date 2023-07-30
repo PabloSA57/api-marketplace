@@ -10,8 +10,11 @@ const config = require(__dirname + "/../config.js")[env];
 const db = {};
 
 console.log(config.url);
+const options = {
+  dialect: "postgres",
+};
 let sequelize;
-sequelize = new Sequelize(config.url);
+sequelize = new Sequelize(config.url, options);
 
 /*if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
