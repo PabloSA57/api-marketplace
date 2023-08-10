@@ -48,7 +48,7 @@ module.exports = {
     static associate(models) {
       this.belongsTo(models.User, {as:'user',foreignKey: { name: 'userId'} })
       this.hasOne(models.Order, {
-        foreignKey: 'orderId',
+        foreignKey: 'customerId',
         as: 'order'
       })
     }
