@@ -2,6 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const routerApi = require('./routes');
+const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
 const app = express();
 
@@ -14,5 +16,12 @@ app.use(morgan("dev"));
 app.get("/", (req, res) => {
   res.send("prueba");
 });
+routerApi(app)
+
+app.use(logErrors);
+app.use(ormErrorHandler);
+app.use(boomErrorHandler);
+app.use(errorHandler);
+
 
 module.exports = app;

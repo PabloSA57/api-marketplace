@@ -1,6 +1,7 @@
 "use strict";
 const { Model, DataTypes } = require("sequelize");
 
+const USER_TABLE = "users";
 const SchemaUser = {
   id: {
     type: DataTypes.UUID,
@@ -53,18 +54,27 @@ const SchemaUser = {
   },
 };
 module.exports = {
+  USER_TABLE,
   SchemaUser,
-  func(sequelize, DataTypes) {
+  func(sequelize) {
     class User extends Model {
       static associate(models) {
         // define association here
+        this.hasOne(models.Store, {
+          foreignKey: "userId",
+          as:'store'
+        });
+        this.hasMany(models.Customer, {
+          foreignKey: 'userId',
+          as: 'customer'
+        })
       }
     }
     User.init(SchemaUser, {
       sequelize,
+      tableName: USER_TABLE,
       modelName: "User",
-      timestamps: true,
-      createdAt: true,
+      timestamps: false,
     });
     return User;
   },
