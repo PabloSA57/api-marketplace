@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const session = require('express-session')
 const routerApi = require('./routes');
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error.handler');
 
@@ -13,6 +14,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 
+app.use(session({
+  secret: 'milei',
+  resave: false,
+  saveUninitialized: true
+}));
 app.get("/", (req, res) => {
   res.send("prueba");
 });

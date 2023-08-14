@@ -1,5 +1,6 @@
 require("dotenv").config();
 const axios = require('axios')
+
 const models = require('./../db/models/index')
 
 const { CLIENT_SECRET, CLIENT_ID, APP_ID } = process.env
@@ -11,12 +12,14 @@ const { Token } = models
 class MercadoPagoService {
     constructor() {}
 
-    async auth(res) {
-        const authUrl = `https://auth.mercadopago.com.ar/authorization?client_id=${APP_ID}&response_type=code&platform_id=mp&redirect_uri=${REDIRECT_URI_DEV}`;
+    async auth(req,res) {
+        const authUrl = `https://auth.mercadopago.com.ar/authorization?client_id=${APP_ID}&response_type=code&platform_id=mp&redirect_uri=${REDIRECT_URI}`;
+        req.session.name = 'Pablo'
         res.redirect(authUrl);
     }
 
-    async redirect(code) {
+    async redirect(req,code) {
+        console.log(req.session.name)
         const { data } = await axios.post('https://api.mercadopago.com/oauth/token', null, {
             params: {
                 grant_type: 'authorization_code',
