@@ -14,7 +14,7 @@ async (req, res, next) => {
     const { code } = req.query
     console.log(req.query)
     try {
-        const response = await service.redirect(code)
+        const response = await service.redirect(req, code)
         res.json(response);
     } catch (error) {
         next(error)
@@ -24,7 +24,7 @@ async (req, res, next) => {
 router.get('/auth', 
 async (req, res, next) => {
     try {
-        await service.auth(res)
+        await service.auth(req,res)
     } catch (error) {
         next(error)
     }
