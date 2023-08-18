@@ -8,7 +8,7 @@ const {createUserSchema, loginUserSchema} = schemas
 const router = express.Router()
 const service = new UserService()
 
-router.post('/',
+router.post('/register',
 validatorHandler(createUserSchema, 'body'),
 async (req, res, next) => {
     
@@ -19,7 +19,7 @@ async (req, res, next) => {
         next(error)
     }
 })
-router.get('/login',
+router.post('/login',
 validatorHandler(loginUserSchema, 'body'),
 async (req, res, next) => {
     

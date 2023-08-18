@@ -19,15 +19,9 @@ class UserService {
     }
 
     async register(data) {
-        try {
-            
             const password = bcrypt.hashSync(data.password, Number.parseInt(10))
-            const user = await User.create({...data, password})
-            return {rta: 'Se creo correctamente', id: user.id}
-        } catch (error) {
-            console.log(error.statusCode)
-            return error
-        }
+             await User.create({...data, password})
+            return {message: "Se creo correctamente"}
         }
     
 
