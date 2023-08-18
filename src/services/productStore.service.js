@@ -1,10 +1,10 @@
 const models = require('./../db/models/index')
 const StoreService = require('./store.service')
-const ProductService = require('./product.service')
+
 
 const { ProductStore, Product } = models
 const storeService = new StoreService()
-const productService = new ProductService()
+
 
 
 class ProductStoreService {
@@ -12,11 +12,11 @@ class ProductStoreService {
 
     async addProductToStore(productsId, userId){
         const store = await storeService.findOne({userId})
-        const products = await productService.findAll({id: productsId})
-       
-        const resp = await store.addProduct(products)
+        const products = await Product.findAll({where: {id: productsId}})
+        console.log(products)
+         await store.addProduct(products)
 
-        return resp
+        return { rta: "Se agregaron correctamente" }
     }
 
     async find(condition){

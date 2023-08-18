@@ -13,7 +13,7 @@ const SchemaOrder = {
     type: DataTypes.UUID,
     allowNull: false,
     primaryKey: true,
-    defaultValue: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
   },
   date: {
     type: DataTypes.DATE,
@@ -29,16 +29,12 @@ const SchemaOrder = {
   },
   num_order: {
     type: DataTypes.STRING,
-    get() {
-      return this.num_order
-    },
-    set() {
-      return this.id.slice(1, 5)
-    }
+    allowNull: true
   },
-  paymentType: {
-    type: DataTypes.ENUM("cash", "mp"),
+  payment: {
+    type:  DataTypes.STRING,
     allowNull: false,
+    defaultValue: "cash"
   },
   delivery: {
     type: DataTypes.BOOLEAN,

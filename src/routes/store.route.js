@@ -7,7 +7,7 @@ const routerPrivate = require('../middlewares/routePrivate');
 const checkRole = require('../middlewares/role');
 
 const service = new StoreService()
-const {createStoreSchema, getStoreAroundSchema, deleteStore} = schemas
+const {createStoreSchema, getStoreAroundSchema, deleteStore, updateStoreChange} = schemas
 
 const router = express.Router()
 
@@ -42,6 +42,20 @@ async (req, res, next) => {
       const {id} = req.params
         const store = await service.delete(id)
         console.log('aqui4')
+        res.status(200).json(store)
+    } catch (error) {
+      next(error)  
+    }
+})
+router.put("/",
+routerPrivate,
+checkRole('seller'),
+validatorHandler(updateStoreChange, 'body'), 
+async (req, res, next) => {
+  const storeId = req._storeId
+  const data = req.body
+    try {
+        const store = await service.update(storeId, data)
         res.status(200).json(store)
     } catch (error) {
       next(error)  

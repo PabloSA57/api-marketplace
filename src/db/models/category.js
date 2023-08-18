@@ -33,7 +33,7 @@ module.exports = {
       static associate(models) {
         // define association here
         this.hasMany(models.Product, {
-          foreignKey: "categoryName",
+          foreignKey: "category_name",
           as: 'product'
         });
       }

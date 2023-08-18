@@ -1,16 +1,16 @@
 const Joi = require('joi');
 
 const id = Joi.number().integer();
-const stock = Joi.number();
+const quantity = Joi.number();
 const price = Joi.number();
 const state = Joi.boolean();
 
 const addProductSchema = Joi.object({
-    productId: Joi.array().items(id)
+    productsId: Joi.array().items(id)
 })
 
 const updateProductSchema = Joi.object({
-    stock,
+    quantity,
     price,
     state
 })
@@ -20,4 +20,11 @@ const paramsSchema = Joi.object({
     storeId: id
 })
 
-module.exports = { addProductSchema, updateProductSchema, paramsSchema }
+const createProductStoreSchema = Joi.object({
+    productStoreId: id,
+    quantity,
+    price,
+    state
+})
+
+module.exports = { addProductSchema, updateProductSchema, paramsSchema, createProductStoreSchema }

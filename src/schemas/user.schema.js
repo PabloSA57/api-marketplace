@@ -5,7 +5,7 @@ const email = Joi.string().email();
 const name = Joi.string();
 const lastname = Joi.string();
 const password = Joi.string().min(8);
-const role = Joi.string().min(5);
+const role = Joi.string().valid("admin", "client", "seller");
 
 const createUserSchema = Joi.object({
     name: name.required(),

@@ -6,37 +6,46 @@ const {
 const { STORE_TABLE } = require("./store");
 const TOKEN_TABLE = "tokens"
 const SchemaToken = {
-  access_token:{
-    type: DataTypes.STRING,
-    allowNull: false
-},
-refresh_token: {
-    type: DataTypes.STRING,
-    allowNull: false
-},
-public_key: {
-    type: DataTypes.STRING
-},
-storeId: {
-  type: DataTypes.INTEGER,
-  allowNull: false,
-  unique: true,
-  reference: {
-    model: STORE_TABLE,
-    key: "id",
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
-  onUpdate: "CASCADE",
-  onDelete: "SET NULL",
-},
-createdAt: {
-  allowNull: false,
-  type: DataTypes.DATE,
-  defaultValue: DataTypes.NOW,
-},
-updatedAt: {
-  type: DataTypes.DATE,
-  defaultValue: DataTypes.NOW,
-},
+  access_token:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  refresh_token: {
+      type: DataTypes.STRING,
+      allowNull: false
+  },
+  public_key: {
+      type: DataTypes.STRING
+  },
+  expire_in:{
+      type: DataTypes.INTEGER,
+      allowNull: false
+  },
+  storeId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: true,
+    reference: {
+      model: STORE_TABLE,
+      key: "id",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
 }
 module.exports = {
   TOKEN_TABLE,

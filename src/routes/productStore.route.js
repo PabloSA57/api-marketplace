@@ -16,8 +16,8 @@ validatorHandler(addProductSchema, 'body'),
 routerPrivate,
 checkRole('admin', "seller"), 
 async (req, res, next) => {
-    const {productsId} = req.body
-    const {userId} = req._user
+    const { productsId } = req.body
+    const { userId } = req._user
     try {
         const products = await service.addProductToStore(productsId, userId)
         res.status(201).json(products)

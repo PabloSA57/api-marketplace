@@ -36,7 +36,16 @@ const SchemaCustomer = {
     },
     onUpdate: "CASCADE",
     onDelete: "SET NULL",
-  }
+  },
+  createdAt: {
+    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
 } 
 
 module.exports = {
@@ -47,7 +56,7 @@ module.exports = {
 
     static associate(models) {
       this.belongsTo(models.User, {as:'user',foreignKey: { name: 'userId'} })
-      this.hasOne(models.Order, {
+      this.hasMany(models.Order, {
         foreignKey: 'customerId',
         as: 'order'
       })
@@ -56,7 +65,8 @@ module.exports = {
   Customer.init(SchemaCustomer, {
     sequelize,
     modelName: 'Customer',
-    tableName: CUSTOMER_TABLE
+    tableName: CUSTOMER_TABLE,
+    timestamps: false,
   });
   return Customer;
 }

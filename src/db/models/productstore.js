@@ -11,7 +11,7 @@ const SchemaProductStore = {
     primaryKey: true,
     autoIncrement: true,
   },
-  stock: {
+  quantity: {
     type: DataTypes.INTEGER,
     allowNull: true,
     defaultValue: 0,
@@ -65,6 +65,7 @@ module.exports = {
       static associate(models) {
         this.belongsTo(models.Product, {as:'product',foreignKey: { name: 'productId'} });
         this.belongsTo(models.Store, {as:'store',foreignKey: { name: 'storeId'} });
+        this.hasMany(models.OrderProducts, {as: "orderproduct", foreignKey: "productId"})
       }
     }
     ProductStore.init(SchemaProductStore, {

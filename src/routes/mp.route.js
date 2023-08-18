@@ -11,20 +11,39 @@ const service = new MercadoPagoService()
 
 router.get('/redirect', 
 async (req, res, next) => {
-    const { code } = req.query
+    const { code } = req.query;
+    const storeId = req.session.storeId
     console.log(req.query)
     try {
-        const response = await service.redirect(req, code)
+        const response = await service.redirect(storeId, code)
         res.json(response);
     } catch (error) {
         next(error)
     }
 } )
 
-router.get('/auth', 
+router.get('/auth',
+routerPrivate,
+checkRole("seller", "admin"), 
 async (req, res, next) => {
+    const storeId  = req._storeId
     try {
-        await service.auth(req,res)
+        const authUrl = await service.auth()
+        req.session.storeId = storeId
+        res.redirect(authUrl);
+    } catch (error) {
+        next(error)
+    }
+}
+)
+
+router.get('/notification', 
+async (req, res, next) => {
+    const { status, preference_id } = req.query;
+    try {
+        const response = await service.notification(status, preference_id)
+
+        res.json(response)
     } catch (error) {
         next(error)
     }

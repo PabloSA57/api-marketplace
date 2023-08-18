@@ -13,6 +13,7 @@ const checkRole = (...roles) => {
                         next(boom.unauthorized())
                          return
                         }
+                    req._storeId = store.id
                     next()
                     return
                 } catch (error) {

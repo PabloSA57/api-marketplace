@@ -7,6 +7,8 @@ const longitud = Joi.number();
 const latitud = Joi.number();
 const direction = Joi.string().min(5);
 const phone = Joi.number();
+const paymentType = Joi.string().valid("cash", "mp", "both");
+const activate = Joi.boolean()
 
 const createStoreSchema = createUserSchema.keys({
     nameStore: nameStore.required(),
@@ -24,6 +26,15 @@ const deleteStore = Joi.object({
     id: id.required(),
 })
 
+const updateStoreChange = Joi.object({
+    nameStore,
+    longitud,
+    latitud,
+    direction,
+    phone,
+    paymentType,
+    activate
+})
 
 
-module.exports = {createStoreSchema, getStoreAroundSchema, deleteStore}
+module.exports = {createStoreSchema, getStoreAroundSchema, deleteStore, updateStoreChange}
