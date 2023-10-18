@@ -2,7 +2,7 @@ const { ValidationError } = require('sequelize');
 const boom = require('@hapi/boom');
 
 function logErrors (err, req, res, next) {
-  console.error("aqui1",err);
+  //console.error("aqui1",err);
   next(err);
 }
 
@@ -25,7 +25,7 @@ function boomErrorHandler(err, req, res, next) {
 }
 
 function ormErrorHandler(err, req, res, next) {
-  console.error("aqui4",err);
+  console.error("aqui4",err.detail);
   if (err instanceof ValidationError) {
     res.status(409).json({
       statusCode: 409,

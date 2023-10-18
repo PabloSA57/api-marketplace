@@ -26,9 +26,9 @@ class StoreService {
 
     async create(data) {
         const {nameStore, latitud, longitud, direction, phone, ...userData} = data
-        const user = await userService.register(userData)
+        const { user } = await userService.register(userData)
       console.log(user.id)
-        if(!user.id) throw boom.notFound()
+        if(!user.id) throw boom.notFound('El usuario ya esta registrado')
         const store = await Store.create(
           {
             name: nameStore, 

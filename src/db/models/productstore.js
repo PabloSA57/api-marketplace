@@ -35,7 +35,7 @@ const SchemaProductStore = {
     },
     onUpdate: "CASCADE",
     onDelete: "SET NULL",
-    },
+  },
   storeId: {
     allowNull: false,
     type: DataTypes.INTEGER,
@@ -63,9 +63,18 @@ module.exports = {
   func(sequelize, DataTypes) {
     class ProductStore extends Model {
       static associate(models) {
-        this.belongsTo(models.Product, {as:'product',foreignKey: { name: 'productId'} });
-        this.belongsTo(models.Store, {as:'store',foreignKey: { name: 'storeId'} });
-        this.hasMany(models.OrderProducts, {as: "orderproduct", foreignKey: "productId"})
+        this.belongsTo(models.Product, {
+          as: "info_product",
+          foreignKey: { name: "productId" },
+        });
+        this.belongsTo(models.Store, {
+          as: "store",
+          foreignKey: { name: "storeId" },
+        });
+        this.hasMany(models.OrderProducts, {
+          as: "orderproduct",
+          foreignKey: "productId",
+        });
       }
     }
     ProductStore.init(SchemaProductStore, {

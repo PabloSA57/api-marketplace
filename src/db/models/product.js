@@ -49,11 +49,18 @@ module.exports = {
   func(sequelize, DataTypes) {
     class Product extends Model {
       static associate(models) {
-        this.belongsTo(models.Category, {as: 'category',foreignKey: { name: 'category_name'}});
-        this.belongsToMany(models.Store, { through: models.ProductStore,foreignKey:'storeId', otherKey:'productId' });
+        this.belongsTo(models.Category, {
+          as: "category",
+          foreignKey: { name: "category_name" },
+        });
+        this.belongsToMany(models.Store, {
+          through: models.ProductStore,
+          foreignKey: "storeId",
+          otherKey: "productId",
+        });
         this.hasMany(models.ProductStore, {
           foreignKey: "productId",
-          as: 'product'
+          as: "info_product",
         });
       }
     }
