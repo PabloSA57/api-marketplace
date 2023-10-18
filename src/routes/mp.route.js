@@ -13,6 +13,7 @@ router.get("/redirect", async (req, res, next) => {
   const { code } = req.query;
   const storeId = req.session.storeId;
   console.log(req.query);
+  console.log(storeId, "id redirect");
   try {
     const response = await service.redirect(storeId, code);
     res.json(response);
@@ -26,7 +27,9 @@ router.get("/auth", async (req, res, next) => {
 
   try {
     const authUrl = await service.auth();
+    console.log(storeId, "storeId");
     req.session.storeId = storeId;
+    console.log(req.session.storeId, "sesion auth");
     res.status(200).json(authUrl);
   } catch (error) {
     next(error);
