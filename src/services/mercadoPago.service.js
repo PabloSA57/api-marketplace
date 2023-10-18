@@ -16,8 +16,8 @@ const { Token, OrderProducts, Customer } = models;
 class MercadoPagoService {
   constructor() {}
 
-  async auth(storeId) {
-    const authUrl = `https://auth.mercadopago.com.ar/authorization?client_id=${APP_ID}&response_type=code&platform_id=mp&redirect_uri=${URI_PRODUCTION}/redirect?storeId=${storeId}`;
+  async auth() {
+    const authUrl = `https://auth.mercadopago.com.ar/authorization?client_id=${APP_ID}&response_type=code&platform_id=mp&redirect_uri=${URI_PRODUCTION}/redirect`;
     return authUrl;
   }
 

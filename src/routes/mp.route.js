@@ -23,24 +23,29 @@ router.get("/redirect", async (req, res, next) => {
   }
 });
 
-router.get("/auth", routerPrivate, async (req, res, next) => {
-  const storeId = req._storeId;
-
-  try {
-    const authUrl = await service.auth(storeId);
-    //console.log(storeId, "storeId");
-    //req.session.storeId = storeId;
-    res.cookie("storeId", storeId, {
-      maxAge: 86400000,
-      httpOnly: true,
-      secure: true, // Reemplaza con la ruta deseada
-    });
-    //console.log(req.session.storeId, "sesion auth");
-    res.status(200).json(authUrl);
-  } catch (error) {
-    next(error);
+router.get(
+  "/auth",
+  routerPrivate,
+  checkRole("seller"),
+  async (req, res, next) => {
+    const storeId = req._storeId;
+    console.log(storeId, "storeId");
+    try {
+      const authUrl = await service.auth(storeId);
+      //console.log(storeId, "storeId");
+      //req.session.storeId = storeId;
+      res.cookie("storeId", storeId, {
+        maxAge: 86400000,
+        httpOnly: true,
+        secure: true, // Reemplaza con la ruta deseada
+      });
+      //console.log(req.session.storeId, "sesion auth");
+      res.status(200).json(authUrl);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 router.get("/notification", async (req, res, next) => {
   const { status, preference_id } = req.query;
