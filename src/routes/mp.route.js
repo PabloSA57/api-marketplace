@@ -11,7 +11,8 @@ const service = new MercadoPagoService();
 
 router.get("/redirect", async (req, res, next) => {
   const { code } = req.query;
-  const storeId = req.session.storeId;
+  const storeId = req.cookies.storeId;
+
   console.log(req.query);
   console.log(storeId, "id redirect");
   try {
@@ -27,9 +28,13 @@ router.get("/auth", async (req, res, next) => {
 
   try {
     const authUrl = await service.auth();
-    console.log(storeId, "storeId");
-    req.session.storeId = storeId;
-    console.log(req.session.storeId, "sesion auth");
+    //console.log(storeId, "storeId");
+    //req.session.storeId = storeId;
+    res.cookie("storeId", storeId, {
+      maxAge: 86400000,
+      httpOnly: true,
+    });
+    //console.log(req.session.storeId, "sesion auth");
     res.status(200).json(authUrl);
   } catch (error) {
     next(error);
