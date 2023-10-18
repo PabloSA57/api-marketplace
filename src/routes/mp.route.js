@@ -14,7 +14,7 @@ router.get("/redirect", async (req, res, next) => {
   const storeId = req.cookies.storeId;
 
   console.log(req.query);
-  console.log(storeId, "id redirect");
+  console.log(req.cookies, "cookies redirect");
   try {
     const response = await service.redirect(storeId, code);
     res.json(response);
@@ -27,12 +27,13 @@ router.get("/auth", async (req, res, next) => {
   const storeId = req._storeId;
 
   try {
-    const authUrl = await service.auth();
+    const authUrl = await service.auth(storeId);
     //console.log(storeId, "storeId");
     //req.session.storeId = storeId;
     res.cookie("storeId", storeId, {
       maxAge: 86400000,
       httpOnly: true,
+      secure: true, // Reemplaza con la ruta deseada
     });
     //console.log(req.session.storeId, "sesion auth");
     res.status(200).json(authUrl);
