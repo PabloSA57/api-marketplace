@@ -23,7 +23,7 @@ router.get("/redirect", async (req, res, next) => {
   }
 });
 
-router.get("/auth", async (req, res, next) => {
+router.get("/auth", routerPrivate, async (req, res, next) => {
   const storeId = req._storeId;
 
   try {
