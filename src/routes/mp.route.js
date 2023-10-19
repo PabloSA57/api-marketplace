@@ -38,6 +38,8 @@ router.get(
       res.cookie("storeId", storeId, {
         maxAge: 86400000,
         httpOnly: true,
+        domain: "api-marketplace.onrender.com",
+        path: "/",
         secure: true, // Reemplaza con la ruta deseada
       });
       //console.log(req.session.storeId, "sesion auth");
