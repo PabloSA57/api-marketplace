@@ -42,6 +42,8 @@ router.get(
         path: "/api/v1/mp/redirect",
         secure: true, // Reemplaza con la ruta deseada
       });
+
+      console.log(req.cookies.storeId, "cookie desde auth");
       //console.log(req.session.storeId, "sesion auth");
       res.status(200).json(authUrl);
     } catch (error) {
