@@ -15,6 +15,7 @@ router.get("/redirect", async (req, res, next) => {
 
   console.log(req.query);
   console.log(req.cookies, "cookies redirect");
+  console.log(storeId, "cookies StoreId");
   try {
     const response = await service.redirect(storeId, code);
     res.json(response);
