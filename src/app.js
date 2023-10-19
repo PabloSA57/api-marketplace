@@ -34,6 +34,9 @@ app.use(
     secret: "milei",
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      domain: "api-marketplace.onrender.com",
+    },
   })
 );
 app.get("/", (req, res) => {

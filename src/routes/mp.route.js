@@ -34,7 +34,7 @@ router.get(
     try {
       const authUrl = await service.auth(storeId);
       //console.log(storeId, "storeId");
-      //req.session.storeId = storeId;
+      req.session.storeId = storeId;
       res.cookie("storeId", storeId, {
         maxAge: 86400000,
         domain: "api-marketplace.onrender.com",
@@ -42,7 +42,7 @@ router.get(
       });
 
       console.log(req.cookies.storeId, "cookie desde auth");
-      //console.log(req.session.storeId, "sesion auth");
+      console.log(req.session.storeId, "sesion auth");
       res.status(200).json(authUrl);
     } catch (error) {
       next(error);
