@@ -37,10 +37,8 @@ router.get(
       //req.session.storeId = storeId;
       res.cookie("storeId", storeId, {
         maxAge: 86400000,
-        httpOnly: true,
         domain: "api-marketplace.onrender.com",
-        path: "/api/v1/mp/redirect",
-        secure: true, // Reemplaza con la ruta deseada
+        path: "/**", // Reemplaza con la ruta deseada
       });
 
       console.log(req.cookies.storeId, "cookie desde auth");
