@@ -3,15 +3,11 @@ const axios = require("axios");
 const boom = require("@hapi/boom");
 
 const models = require("./../db/models/index");
-const OrderService = require("./order.service");
-const StoreService = require("./store.service");
-const orderService = new OrderService();
-const storeService = new StoreService();
 
 const { CLIENT_SECRET, CLIENT_ID, APP_ID } = process.env;
 const URI_PRODUCTION = "https://api-marketplace.onrender.com/api/v1/mp";
 const REDIRECT_URI_DEV = "http://localhost:3001/api/v1/mp/redirect";
-const { Token, OrderProducts, Customer } = models;
+const { Token } = models;
 
 class MercadoPagoService {
   constructor() {}
@@ -22,6 +18,7 @@ class MercadoPagoService {
   }
 
   async redirect(storeId, code) {
+    console.log(code, storeId, " redirect mp");
     const { data } = await axios.post(
       "https://api.mercadopago.com/oauth/token",
       null,
@@ -36,7 +33,7 @@ class MercadoPagoService {
       }
     );
     const { access_token, refresh_token, public_key, expire_in } = data;
-    console.log(data);
+
     await this.saveToken({
       access_token,
       refresh_token,
@@ -70,6 +67,7 @@ class MercadoPagoService {
         unit_price: parseInt(e.price),
       };
     });
+
     const preference = {
       items: items,
       auto_return: "all",

@@ -32,16 +32,20 @@ const SchemaStore = {
   direction: {
     type: DataTypes.STRING,
   },
-  activate: {
+  open: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-  paymentType: {
+  payment_type: {
+    type: DataTypes.ENUM("cash", "mp", "both"),
+    defaultValue: "cash",
+  },
+  active_type: {
     type: DataTypes.ENUM("cash", "mp", "both"),
     defaultValue: "cash",
   },
   userId: {
-    field: 'user_id',
+    field: "user_id",
     type: DataTypes.UUID,
     allowNull: false,
     reference: {
@@ -68,19 +72,22 @@ module.exports = {
   func(sequelize, DataTypes) {
     class Store extends Model {
       static associate(models) {
-        this.belongsTo(models.User, {as:'user',foreignKey: { name: 'userId'} });
-        this.belongsToMany(models.Product, { through: models.ProductStore, foreignKey: 'storeId', otherKey:'productId' });
-        this.hasMany(models.ProductStore, {
+        this.belongsTo(models.User, {
+          as: "user",
+          foreignKey: { name: "userId" },
+        });
+
+        this.hasMany(models.Product, {
           foreignKey: "storeId",
-          as: 'productstore'
+          as: "product",
         });
         this.hasMany(models.Order, {
           foreignKey: "storeId",
-          as: 'order'
+          as: "order",
         });
         this.hasOne(models.Token, {
           foreignKey: "storeId",
-          as: 'token'
+          as: "token",
         });
       }
     }

@@ -1,11 +1,8 @@
-'use strict';
-const {
-  Model,
-  DataTypes
-} = require('sequelize');
-const { USER_TABLE } = require('./user');
+"use strict";
+const { Model, DataTypes } = require("sequelize");
+const { USER_TABLE } = require("./user");
 
-const CUSTOMER_TABLE = 'customers'
+const CUSTOMER_TABLE = "customers";
 const SchemaCustomer = {
   id: {
     type: DataTypes.INTEGER,
@@ -14,15 +11,15 @@ const SchemaCustomer = {
   },
   direction: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   latitud: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    allowNull: true,
   },
   longitud: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    allowNull: true,
   },
   phone: {
     type: DataTypes.STRING,
@@ -46,28 +43,26 @@ const SchemaCustomer = {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-} 
+};
 
 module.exports = {
   CUSTOMER_TABLE,
   SchemaCustomer,
   func(sequelize, DataTypes) {
-  class Customer extends Model {
-
-    static associate(models) {
-      this.belongsTo(models.User, {as:'user',foreignKey: { name: 'userId'} })
-      this.hasMany(models.Order, {
-        foreignKey: 'customerId',
-        as: 'order'
-      })
+    class Customer extends Model {
+      static associate(models) {
+        this.belongsTo(models.User, {
+          as: "user",
+          foreignKey: { name: "userId" },
+        });
+      }
     }
-  }
-  Customer.init(SchemaCustomer, {
-    sequelize,
-    modelName: 'Customer',
-    tableName: CUSTOMER_TABLE,
-    timestamps: false,
-  });
-  return Customer;
-}
+    Customer.init(SchemaCustomer, {
+      sequelize,
+      modelName: "Customer",
+      tableName: CUSTOMER_TABLE,
+      timestamps: false,
+    });
+    return Customer;
+  },
 };

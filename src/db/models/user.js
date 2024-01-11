@@ -62,12 +62,16 @@ module.exports = {
         // define association here
         this.hasOne(models.Store, {
           foreignKey: "userId",
-          as:'store'
+          as: "store",
         });
-        this.hasMany(models.Customer, {
-          foreignKey: 'userId',
-          as: 'customer'
-        })
+        this.hasMany(models.Order, {
+          foreignKey: "customerId",
+          as: "order",
+        });
+        this.hasOne(models.Customer, {
+          foreignKey: "userId",
+          as: "customer",
+        });
       }
     }
     User.init(SchemaUser, {

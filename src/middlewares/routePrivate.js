@@ -6,10 +6,11 @@ const routerPrivate = express.Router();
 
 routerPrivate.use((req, res, next) => {
   const token = req.headers["authorization"];
-  console.log(token);
+  //
   if (token) {
     jwt.verify(token, "pepe", (err, decoded) => {
       if (err) {
+        console.log("err", err);
         next(boom.unauthorized());
       } else {
         req._user = decoded;

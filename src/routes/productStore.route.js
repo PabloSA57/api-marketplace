@@ -12,6 +12,23 @@ const service = new ProductStoreService();
 const { addProductSchema, updateProductSchema, paramsSchema } = schemas;
 
 router.post(
+  "/add",
+  validatorHandler(addProductSchema, "body"),
+  routerPrivate,
+  checkRole("admin", "seller"),
+  async (req, res, next) => {
+    const { productsId } = req.body;
+    const { userId } = req._user;
+    try {
+      const products = await service.addProductToStore(productsId, userId);
+      res.status(201).json(products);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.post(
   "/",
   validatorHandler(addProductSchema, "body"),
   routerPrivate,
@@ -69,10 +86,12 @@ router.put(
   checkRole("admin", "seller"),
   async (req, res, next) => {
     const storeId = req._storeId;
+
+    console.log(storeId, "storeId");
     const data = req.body;
     const { productId } = req.params;
     try {
-      await service.update(data, productId);
+      await service.update(data, productId, storeId);
       const products = await service.findProducts(storeId);
       res.status(200).json(products);
     } catch (error) {

@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const boom = require("@hapi/boom");
 const models = require("../db/models");
 
-const { User } = models;
+const { User, Customer } = models;
 
 class UserService {
   constructor() {}
@@ -22,17 +22,22 @@ class UserService {
     if (isUser) throw boom.badRequest("Usuario ya registrado");
     const password = bcrypt.hashSync(data.password, Number.parseInt(10));
     const user = await User.create({ ...data, password });
+
+    if (user.role === "client") {
+      await Customer.create({ userId: user.id });
+    }
     return { message: "Se creo correctamente", user };
   }
 
   async login(data) {
     const user = await this.find(data.email);
-
+    if (!user) throw boom.unauthorized("Usuario no registrado");
     bcrypt.compareSync(data.password, user.password);
     let token = jwt.sign({ userId: user.id, role: user.role }, "pepe", {
       expiresIn: "24h",
     });
-    return { token, role: user.role };
+
+    return { token, role: user.role, email: user.email };
   }
 
   async delete(email) {

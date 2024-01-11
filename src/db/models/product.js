@@ -1,6 +1,7 @@
 "use strict";
 const { Model, DataTypes } = require("sequelize");
 const { CATEGORY_TABLE } = require("./category");
+const { STORE_TABLE } = require("./store");
 
 const PRODUCT_TABLE = "products";
 
@@ -18,9 +19,24 @@ const SchemaProduct = {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  unit: {
+  unit_measurement: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: true,
+    defaultValue: 0,
+  },
+  state: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: false,
   },
   category_name: {
     allowNull: false,
@@ -28,6 +44,16 @@ const SchemaProduct = {
     references: {
       model: CATEGORY_TABLE,
       key: "name",
+    },
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
+  },
+  storeId: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    references: {
+      model: STORE_TABLE,
+      key: "id",
     },
     onUpdate: "CASCADE",
     onDelete: "SET NULL",
@@ -53,14 +79,13 @@ module.exports = {
           as: "category",
           foreignKey: { name: "category_name" },
         });
-        this.belongsToMany(models.Store, {
-          through: models.ProductStore,
-          foreignKey: "storeId",
-          otherKey: "productId",
+        this.belongsTo(models.Store, {
+          as: "store",
+          foreignKey: { name: "storeId" },
         });
-        this.hasMany(models.ProductStore, {
+        this.hasMany(models.OrderProducts, {
+          as: "orderproduct",
           foreignKey: "productId",
-          as: "info_product",
         });
       }
     }

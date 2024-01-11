@@ -1,12 +1,9 @@
-'use strict';
-const {
-  Model,
-  DataTypes
-} = require('sequelize');
-const { STORE_TABLE } = require('./store');
-const { CUSTOMER_TABLE } = require('./customer');
+"use strict";
+const { Model, DataTypes } = require("sequelize");
+const { STORE_TABLE } = require("./store");
+const { USER_TABLE } = require("./user");
 
-const ORDER_TABLE = 'orders'
+const ORDER_TABLE = "orders";
 
 const SchemaOrder = {
   id: {
@@ -21,26 +18,29 @@ const SchemaOrder = {
   },
   amount: {
     type: DataTypes.DOUBLE,
-    allowNull: false
+    allowNull: false,
   },
   state: {
     type: DataTypes.ENUM("pendding", "success", "cancelled"),
-    defaultValue: 'pendding'
+    defaultValue: "pendding",
   },
   num_order: {
     type: DataTypes.STRING,
-    allowNull: true
+    allowNull: true,
   },
-  payment: {
-    type:  DataTypes.STRING,
-    allowNull: false,
-    defaultValue: "cash"
+  paymentType: {
+    type: DataTypes.ENUM("cash", "mp", "both"),
+    defaultValue: "cash",
+  },
+  paid: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
   },
   delivery: {
     type: DataTypes.BOOLEAN,
-    allowNull: false
+    allowNull: false,
   },
-  storeId:{
+  storeId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -50,11 +50,11 @@ const SchemaOrder = {
     onUpdate: "CASCADE",
     onDelete: "SET NULL",
   },
-  customerId:{
-    type: DataTypes.INTEGER,
+  customerId: {
+    type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model:  CUSTOMER_TABLE,
+      model: USER_TABLE,
       key: "id",
     },
     onUpdate: "CASCADE",
@@ -69,28 +69,39 @@ const SchemaOrder = {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-}
+};
 
 module.exports = {
   ORDER_TABLE,
   SchemaOrder,
   func(sequelize) {
-  class Order extends Model {
-    static associate(models) {
-      this.belongsTo(models.Store, {as:'store',foreignKey: { name: 'storeId'} })
-      this.hasMany(models.OrderProducts, {
-        foreignKey: 'orderId',
-        as: 'orderproduct'
-      })
-      this.belongsTo(models.Customer, {as:'customer',foreignKey: { name: 'customerId'} })
+    class Order extends Model {
+      static associate(models) {
+        this.belongsTo(models.Store, {
+          as: "store",
+          foreignKey: { name: "storeId" },
+        });
+        this.hasMany(models.OrderProducts, {
+          foreignKey: "orderId",
+          as: "orderproduct",
+        });
+        this.hasOne(models.InfoSend, {
+          foreignKey: "orderId",
+          as: "infosend",
+        });
+        this.belongsTo(models.User, {
+          as: "customer",
+          foreignKey: { name: "customerId" },
+        });
+      }
     }
-  }
-  Order.init(SchemaOrder, {
-    sequelize,
-    modelName: 'Order',
-    tableName: ORDER_TABLE,
-    timestamps: true,
-    createdAt: true,
-  });
-  return Order;
-}};
+    Order.init(SchemaOrder, {
+      sequelize,
+      modelName: "Order",
+      tableName: ORDER_TABLE,
+      timestamps: true,
+      createdAt: true,
+    });
+    return Order;
+  },
+};

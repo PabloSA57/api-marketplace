@@ -8,7 +8,7 @@ const checkRole = (...roles) => {
     if (roles.includes(user.role)) {
       if (user.role === "seller") {
         try {
-          console.log("rolesuser", user.userId);
+          //  console.log("rolesuser", user.userId);
           const store = await Store.findOne({
             where: { userId: user.userId },
           });

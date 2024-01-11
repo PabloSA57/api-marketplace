@@ -1,7 +1,7 @@
 const algoliasearch = require("algoliasearch");
 require("dotenv").config();
 
-const { ALGOLIA_API_KEY, ALGOLIA_NAME_APP} = process.env;
+const { ALGOLIA_API_KEY, ALGOLIA_NAME_APP } = process.env;
 
 const client = algoliasearch("164IVI6O9S", ALGOLIA_API_KEY);
 
@@ -31,12 +31,18 @@ const storeAround_ALG = async (lat, lng) => {
 };
 
 const deleteObject_ALG = async (id) => {
-  const object = await store_algolia.deleteObject(id)
-  return object
-}
+  const object = await store_algolia.deleteObject(id);
+  return object;
+};
+
+const updateObject_ALG = async (data) => {
+  const object = await store_algolia.partialUpdateObject(data);
+  return object;
+};
 
 module.exports = {
   newStore_ALG,
   storeAround_ALG,
-  deleteObject_ALG
+  deleteObject_ALG,
+  updateObject_ALG,
 };

@@ -1,32 +1,27 @@
 "use strict";
 const { Model, DataTypes } = require("sequelize");
 const { ORDER_TABLE } = require("./order");
-const { PRODUCT_TABLE } = require("./product");
 
-const ORDERPRODUCTS_TABLE = "orderproduct";
-const SchemaOrderProduct = {
+const INFOSEND_TABLE = "infosend";
+const SchemaInfoSend = {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  name: {
+  direction: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  imgurl: {
-    type: DataTypes.STRING,
-  },
-  unit_measurement: {
-    type: DataTypes.STRING,
-  },
-  price: {
-    type: DataTypes.INTEGER,
-  },
-  quantity: {
+  latitud: {
     type: DataTypes.FLOAT,
+    allowNull: false,
   },
-  category_name: {
+  longitud: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  phone: {
     type: DataTypes.STRING,
   },
   orderId: {
@@ -34,16 +29,6 @@ const SchemaOrderProduct = {
     type: DataTypes.UUID,
     references: {
       model: ORDER_TABLE,
-      key: "id",
-    },
-    onUpdate: "CASCADE",
-    onDelete: "SET NULL",
-  },
-  productId: {
-    allowNull: true,
-    type: DataTypes.INTEGER,
-    references: {
-      model: PRODUCT_TABLE,
       key: "id",
     },
     onUpdate: "CASCADE",
@@ -61,28 +46,25 @@ const SchemaOrderProduct = {
 };
 
 module.exports = {
-  ORDERPRODUCTS_TABLE,
-  SchemaOrderProduct,
+  INFOSEND_TABLE,
+  SchemaInfoSend,
   func(sequelize) {
-    class OrderProducts extends Model {
+    class InfoSend extends Model {
       static associate(models) {
+        // define association here
         this.belongsTo(models.Order, {
           as: "order",
           foreignKey: { name: "orderId" },
         });
-        this.belongsTo(models.Product, {
-          as: "product",
-          foreignKey: { name: "productId" },
-        });
       }
     }
-    OrderProducts.init(SchemaOrderProduct, {
+    InfoSend.init(SchemaInfoSend, {
       sequelize,
-      tableName: ORDERPRODUCTS_TABLE,
-      modelName: "OrderProducts",
+      modelName: "InfoSend",
+      tableName: INFOSEND_TABLE,
       timestamps: true,
       createdAt: true,
     });
-    return OrderProducts;
+    return InfoSend;
   },
 };

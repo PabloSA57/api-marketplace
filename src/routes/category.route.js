@@ -1,27 +1,41 @@
-const express = require('express');
+const express = require("express");
 
-const CartegoryService = require('./../services/category.service');
-const validatorHandler = require('./../middlewares/validator.handler.js')
+const CartegoryService = require("./../services/category.service");
+const validatorHandler = require("./../middlewares/validator.handler.js");
 
-const routerPrivate = require('../middlewares/routePrivate');
-const checkRole = require('../middlewares/role');
+const routerPrivate = require("../middlewares/routePrivate");
+const checkRole = require("../middlewares/role");
 
-const router = express.Router()
-const service = new CartegoryService()
+const router = express.Router();
+const service = new CartegoryService();
 
-
-router.post("/",
-routerPrivate,
-checkRole('admin', 'seller'),
-async (req, res, next) => {
+router.post(
+  "/",
+  routerPrivate,
+  checkRole("admin", "seller"),
+  async (req, res, next) => {
     try {
-        const categories = await service.create(req.body)
+      const categories = await service.create(req.body);
 
-        res.status(201).json(categories)
+      res.status(201).json(categories);
     } catch (error) {
-        next(error)
+      next(error);
     }
-}
-)
+  }
+);
+router.get(
+  "/",
+  routerPrivate,
+  checkRole("admin", "seller"),
+  async (req, res, next) => {
+    try {
+      const categories = await service.findAll();
 
-module.exports = router
+      res.status(200).json(categories);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+module.exports = router;

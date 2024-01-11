@@ -32,15 +32,16 @@ class ProductStoreService {
     return products;
   }
 
-  async update(change, productId) {
+  async update(change, productId, storeId) {
     console.log("change:", change, " id:", productId);
     const product = await ProductStore.update(change, {
-      where: { id: productId },
+      where: { id: productId, storeId },
     });
 
     return { rta: "Se actualizo correctamente", product };
   }
 
+  //allowNull "orderproduct"
   async delete(id) {
     console.log(id, "ID product");
     const model = await ProductStore.findByPk(id);
@@ -48,12 +49,16 @@ class ProductStoreService {
     return { rta: "Se borro correctamente" };
   }
 
-  async findProductsStore(id) {
-    const store = await storeService.findOne({ id });
+  async findProductsStore(storeId) {
     //const products = await store.getProducts({where: {id:1}})
     const products = await this.find({
-      where: { storeId: store.id, state: true },
-      include: "product",
+      where: { storeId, state: true },
+      include: [
+        {
+          model: Product,
+          as: "info_product",
+        },
+      ],
     });
     return products;
   }
