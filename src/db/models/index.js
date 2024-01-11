@@ -5,15 +5,16 @@ const path = require("path");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-const prueba= process.env.PRUEBA || "NADA"
+const prueba = process.env.PRUEBA || "NADA";
 const config = require(__dirname + "/../config.js")[env];
 const db = {};
-console.log(env)
-console.log(prueba)
+console.log(env);
+console.log(prueba);
 const options = {
   dialect: "postgres",
   dialectOptions: {
     ssl: {
+      require: true,
       rejectUnauthorized: false,
     },
   },
@@ -23,7 +24,7 @@ console.log(config.url);
 
 let sequelize;
 if (env === "production") {
-  console.log('aqui')
+  console.log("aqui");
   sequelize = new Sequelize(config.url, options);
 } else {
   sequelize = new Sequelize(config.url, { dialect: "postgres" });
