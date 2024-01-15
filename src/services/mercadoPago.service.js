@@ -19,7 +19,7 @@ class MercadoPagoService {
   async redirect(storeId, code) {
     console.log(code, storeId, " redirect mp");
     try {
-      const { data } = await axios.post(
+      const response = await axios.post(
         "https://api.mercadopago.com/oauth/token",
         null,
         {
@@ -32,12 +32,14 @@ class MercadoPagoService {
           },
         }
       );
+
+      console.log("response: ", response);
     } catch (error) {
       console.log(error, "errorMP");
     }
 
-    console.log(data, "data");
-    const { access_token, refresh_token, public_key, expire_in } = data;
+    //console.log(data, "data");
+    /*const { access_token, refresh_token, public_key, expire_in } = data;
 
     await this.saveToken({
       access_token,
@@ -45,7 +47,7 @@ class MercadoPagoService {
       public_key,
       expire_in,
       storeId,
-    });
+    });*/
     return { rta: "Todo correcto" };
   }
 
