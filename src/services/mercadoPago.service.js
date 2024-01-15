@@ -12,7 +12,7 @@ class MercadoPagoService {
   constructor() {}
 
   async auth() {
-    const authUrl = `https://auth.mercadopago.com.ar/authorization?client_id=${APP_ID}&response_type=code&platform_id=mp&redirect_uri=${URL_REDIRECT_MP}/redirect`;
+    const authUrl = `https://auth.mercadopago.com.ar/authorization?client_id=${APP_ID}&response_type=code&platform_id=mp&redirect_uri=${URL_REDIRECT_MP}`;
     return authUrl;
   }
 
