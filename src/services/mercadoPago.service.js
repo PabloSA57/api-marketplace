@@ -34,14 +34,14 @@ class MercadoPagoService {
       );
 
       console.log("response: ", response);
-      const { access_token, refresh_token, public_key, expire_in } =
+      const { access_token, refresh_token, public_key, expires_in } =
         await response.data;
 
       await this.saveToken({
         access_token,
         refresh_token,
         public_key,
-        expire_in,
+        expire_in: expires_in,
         storeId,
       });
     } catch (error) {
