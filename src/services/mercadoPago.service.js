@@ -4,34 +4,39 @@ const boom = require("@hapi/boom");
 
 const models = require("./../db/models/index");
 
-const { CLIENT_SECRET, CLIENT_ID, APP_ID } = process.env;
-const URI_PRODUCTION = "https://api-marketplace.onrender.com/api/v1/mp";
-const REDIRECT_URI_DEV = "http://localhost:3001/api/v1/mp/redirect";
+const { CLIENT_SECRET, CLIENT_ID, APP_ID, URL_REDIRECT_MP } = process.env;
+
 const { Token } = models;
 
 class MercadoPagoService {
   constructor() {}
 
   async auth() {
-    const authUrl = `https://auth.mercadopago.com.ar/authorization?client_id=${APP_ID}&response_type=code&platform_id=mp&redirect_uri=${URI_PRODUCTION}/redirect`;
+    const authUrl = `https://auth.mercadopago.com.ar/authorization?client_id=${APP_ID}&response_type=code&platform_id=mp&redirect_uri=${URL_REDIRECT_MP}/redirect`;
     return authUrl;
   }
 
   async redirect(storeId, code) {
     console.log(code, storeId, " redirect mp");
-    const { data } = await axios.post(
-      "https://api.mercadopago.com/oauth/token",
-      null,
-      {
-        params: {
-          grant_type: "authorization_code",
-          client_id: CLIENT_ID,
-          client_secret: CLIENT_SECRET,
-          code,
-          redirect_uri: `${URI_PRODUCTION}/redirect`,
-        },
-      }
-    );
+    try {
+      const { data } = await axios.post(
+        "https://api.mercadopago.com/oauth/token",
+        null,
+        {
+          params: {
+            grant_type: "authorization_code",
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
+            code,
+            redirect_uri: `${URL_REDIRECT_MP}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log(error, "errorMP");
+    }
+
+    console.log(data, "data");
     const { access_token, refresh_token, public_key, expire_in } = data;
 
     await this.saveToken({
