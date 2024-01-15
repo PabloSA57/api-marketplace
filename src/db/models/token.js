@@ -1,30 +1,27 @@
-'use strict';
-const {
-  Model,
-  DataTypes
-} = require('sequelize');
+"use strict";
+const { Model, DataTypes } = require("sequelize");
 const { STORE_TABLE } = require("./store");
-const TOKEN_TABLE = "tokens"
+const TOKEN_TABLE = "tokens";
 const SchemaToken = {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
-  access_token:{
+  access_token: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   refresh_token: {
-      type: DataTypes.STRING,
-      allowNull: false
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   public_key: {
-      type: DataTypes.STRING
+    type: DataTypes.STRING,
   },
-  expire_in:{
-      type: DataTypes.INTEGER,
-      allowNull: false
+  expire_in: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   storeId: {
     type: DataTypes.INTEGER,
@@ -46,21 +43,25 @@ const SchemaToken = {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-}
+};
 module.exports = {
   TOKEN_TABLE,
   SchemaToken,
   func(sequelize) {
-  class Token extends Model {
-   
-    static associate(models) {
-      // define association here
-      this.belongsTo(models.Store, {as:'store',foreignKey: { name: 'storeId'} })
+    class Token extends Model {
+      static associate(models) {
+        // define association here
+        this.belongsTo(models.Store, {
+          as: "store",
+          foreignKey: { name: "storeId" },
+        });
+      }
     }
-  }
-  Token.init(SchemaToken, {
-    sequelize,
-    modelName: 'Token',
-  });
-  return Token;
-}};
+    Token.init(SchemaToken, {
+      sequelize,
+      tableName: TOKEN_TABLE,
+      modelName: "Token",
+    });
+    return Token;
+  },
+};
