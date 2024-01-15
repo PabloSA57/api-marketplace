@@ -4,7 +4,7 @@ const boom = require("@hapi/boom");
 
 const models = require("./../db/models/index");
 
-const { CLIENT_SECRET, CLIENT_ID, APP_ID, URL_REDIRECT_MP } = process.env;
+const { CLIENT_SECRET, CLIENT_ID, APP_ID, URL_REDIRECT_MP, URL } = process.env;
 
 const { Token } = models;
 
@@ -80,9 +80,9 @@ class MercadoPagoService {
       items: items,
       auto_return: "all",
       back_urls: {
-        success: `${URI_PRODUCTION}/notification`,
-        failure: `${URI_PRODUCTION}/notification`,
-        pending: `${URI_PRODUCTION}/notification`,
+        success: `${URL}/notification`,
+        failure: `${URL}/notification`,
+        pending: `${URL}/notification`,
       },
       marketplace_fee: 10,
     };
