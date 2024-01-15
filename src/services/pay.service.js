@@ -7,7 +7,7 @@ class PayService {
 
   async pay(products, storeId) {
     const response = await mercadoPagoService.checkout(products, storeId);
-
+    console.log(response, "responseService");
     return response;
   }
 }
