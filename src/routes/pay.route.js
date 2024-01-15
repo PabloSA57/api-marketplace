@@ -10,8 +10,6 @@ const PayService = require("../services/pay.service");
 const payService = new PayService();
 const router = express.Router();
 
-const { PaySchema } = schemas;
-
 router.post("/", routerPrivate, checkRole("client"), async (req, res, next) => {
   const { products, storeId } = req.body;
 
@@ -19,7 +17,7 @@ router.post("/", routerPrivate, checkRole("client"), async (req, res, next) => {
     const response = payService.pay(products, storeId);
 
     //socket.emit("notification", { list: "hola", id: socket.id });
-    res.status(201).json(response);
+    res.status(200).json(response);
   } catch (error) {
     next(error);
   }

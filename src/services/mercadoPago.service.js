@@ -100,7 +100,7 @@ class MercadoPagoService {
       );
 
       console.log(response, "resMP");
-      return response;
+      return response.data.init_point;
     } catch (error) {
       console.log(error, "error");
       return null;
