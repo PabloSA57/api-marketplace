@@ -92,13 +92,19 @@ class MercadoPagoService {
       "Content-Type": "application/json",
     };
 
-    const response = await axios.post(
-      "https://api.mercadopago.com/checkout/preferences",
-      preference,
-      { headers: headers }
-    );
+    try {
+      const response = await axios.post(
+        "https://api.mercadopago.com/checkout/preferences",
+        preference,
+        { headers: headers }
+      );
 
-    return response;
+      console.log(response, "resMP");
+      return response;
+    } catch (error) {
+      console.log(error, "error");
+      return null;
+    }
   }
 
   async notification(status, id) {
