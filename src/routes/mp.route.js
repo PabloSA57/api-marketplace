@@ -43,13 +43,13 @@ router.get(
 );
 
 router.get("/notification", async (req, res, next) => {
-  const { status, preference_id } = req.query;
+  const { status, orderId, storeId, customerId } = req.query;
 
   console.log(req.query, "queryNoti");
   try {
-    const response = await service.notification(status, preference_id);
+    await service.notification(status, orderId, storeId, customerId);
 
-    res.json(response);
+    res.redirect(`${process.env.URL_FRONTEND}/inicio`);
   } catch (error) {
     next(error);
   }
