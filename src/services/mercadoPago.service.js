@@ -113,7 +113,7 @@ class MercadoPagoService {
 
   async notification(status, preference_id) {
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         `https://api.mercadopago.com/checkout/preferences/${preference_id}`
       );
 
