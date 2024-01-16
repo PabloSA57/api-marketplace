@@ -61,7 +61,7 @@ class MercadoPagoService {
     return token;
   }
 
-  async checkout(products, storeId, orderId) {
+  async checkout(products, storeId, orderId, customerId) {
     const token = await Token.findOne({ where: { storeId } });
     if (!token || !token.access_token)
       throw new boom.notFound("No tiene token");
