@@ -5,8 +5,12 @@ const mercadoPagoService = new MercadoPagoService();
 class PayService {
   constructor() {}
 
-  async pay(products, storeId) {
-    const response = await mercadoPagoService.checkout(products, storeId);
+  async pay(products, storeId, orderId) {
+    const response = await mercadoPagoService.checkout(
+      products,
+      storeId,
+      orderId
+    );
     console.log(response, "responseService");
     return response;
   }

@@ -83,12 +83,12 @@ class MercadoPagoService {
       items: items,
       auto_return: "all",
       back_urls: {
-        success: `${URL}/mp/notification`,
-        failure: `${URL}/mp/notification`,
-        pending: `${URL}/mp/notification`,
+        success: `${URL}/mp/notification?storeId=${storeId}&orderId=${orderId}`,
+        failure: `${URL}/mp/notification?storeId=${storeId}&orderId=${orderId}`,
+        pending: `${URL}/mp/notification?storeId=${storeId}&orderId=${orderId}`,
       },
       marketplace_fee: 10,
-      additional_info: orderId,
+      additional_info: JSON.stringify({ orderId, storeId }),
     };
 
     const headers = {
@@ -112,18 +112,20 @@ class MercadoPagoService {
   }
 
   async notification(status, preference_id) {
-    try {
+    /*try {
       const response = await axios.get(
         `https://api.mercadopago.com/checkout/preferences/${preference_id}`
       );
-
-      console.log(response.data.additional_info, "resMP");
-      await orderService.update({ status }, response.data.additional_info);
+      const additional_info = JSON.parse(response.data.additional_info);
+      console.log(additional_info, "resNotfication");
+      //await orderService.update({ status }, response.data.additional_info);
       return { rta: "listo" };
     } catch (error) {
       console.log(error, "error");
       return error;
-    }
+    }*/
+
+    return { rta: "listo" };
   }
 }
 module.exports = MercadoPagoService;

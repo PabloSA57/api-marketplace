@@ -44,6 +44,8 @@ router.get(
 
 router.get("/notification", async (req, res, next) => {
   const { status, preference_id } = req.query;
+
+  console.log(req.query, "queryNoti");
   try {
     const response = await service.notification(status, preference_id);
 
