@@ -113,7 +113,7 @@ class MercadoPagoService {
   }
 
   async notification(status, orderId, storeId, customerId) {
-    await orderService.update({ paid: status === "success" }, orderId);
+    await orderService.update({ paid: status === "approved" }, orderId);
 
     return { rta: "listo" };
   }
