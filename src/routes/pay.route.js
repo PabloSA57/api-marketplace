@@ -11,10 +11,10 @@ const payService = new PayService();
 const router = express.Router();
 
 router.post("/", routerPrivate, checkRole("client"), async (req, res, next) => {
-  const { products, storeId } = req.body;
+  const { products, storeId, orderId } = req.body;
 
   try {
-    const response = await payService.pay(products, storeId);
+    const response = await payService.pay(products, storeId, orderId);
 
     //socket.emit("notification", { list: "hola", id: socket.id });
     res.status(200).json({ init_point: response, msg: "success" });

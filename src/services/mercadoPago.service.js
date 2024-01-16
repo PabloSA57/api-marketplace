@@ -3,10 +3,13 @@ const axios = require("axios");
 const boom = require("@hapi/boom");
 
 const models = require("./../db/models/index");
+const OrderService = require("./order.service");
 
 const { CLIENT_SECRET, CLIENT_ID, APP_ID, URL_REDIRECT_MP, URL } = process.env;
 
 const { Token } = models;
+
+const orderService = new OrderService();
 
 class MercadoPagoService {
   constructor() {}
@@ -58,7 +61,7 @@ class MercadoPagoService {
     return token;
   }
 
-  async checkout(products, storeId) {
+  async checkout(products, storeId, orderId) {
     const token = await Token.findOne({ where: { storeId } });
     if (!token || !token.access_token)
       throw new boom.notFound("No tiene token");
@@ -80,11 +83,12 @@ class MercadoPagoService {
       items: items,
       auto_return: "all",
       back_urls: {
-        success: `${URL}/notification`,
-        failure: `${URL}/notification`,
-        pending: `${URL}/notification`,
+        success: `${URL}/mp/notification`,
+        failure: `${URL}/mp/notification`,
+        pending: `${URL}/mp/notification`,
       },
       marketplace_fee: 10,
+      additional_info: orderId,
     };
 
     const headers = {
@@ -107,9 +111,19 @@ class MercadoPagoService {
     }
   }
 
-  async notification(status, id) {
-    await orderService.update({ status }, id);
-    return { rta: "listo" };
+  async notification(status, preference_id) {
+    try {
+      const response = await axios.post(
+        `https://api.mercadopago.com/checkout/preferences/${preference_id}`
+      );
+
+      console.log(response.data.additional_info, "resMP");
+      await orderService.update({ status }, response.data.additional_info);
+      return { rta: "listo" };
+    } catch (error) {
+      console.log(error, "error");
+      return error;
+    }
   }
 }
 module.exports = MercadoPagoService;
