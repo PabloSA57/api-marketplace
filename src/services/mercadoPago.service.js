@@ -4,12 +4,14 @@ const boom = require("@hapi/boom");
 
 const models = require("./../db/models/index");
 const OrderService = require("./order.service");
+const StoreService = require("./store.service");
 
 const { CLIENT_SECRET, CLIENT_ID, APP_ID, URL_REDIRECT_MP, URL } = process.env;
 
 const { Token } = models;
 
 const orderService = new OrderService();
+const storeService = new StoreService();
 
 class MercadoPagoService {
   constructor() {}
@@ -47,6 +49,8 @@ class MercadoPagoService {
         expire_in: expires_in,
         storeId,
       });
+
+      await storeService.update(storeId, { payment_type: "both" });
     } catch (error) {
       console.log(error, "errorMP");
     }
@@ -104,7 +108,6 @@ class MercadoPagoService {
         { headers: headers }
       );
 
-      console.log(response.data.init_point, "resMP");
       return response.data.init_point;
     } catch (error) {
       console.log(error, "error");

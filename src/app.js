@@ -5,15 +5,15 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const routerApi = require("./routes");
-const app = express();
-const server = http.createServer(app);
 const crypto = require("crypto");
 
+const app = express();
+const server = http.createServer(app);
 const randomId = () => crypto.randomBytes(8).toString("hex");
 const io = sockeIo(server, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUST"],
+    origin: ["http://localhost:3000", "https://kisko-app.vercel.app"],
+    methods: ["GET", "POST", "PUT"],
   },
 });
 
@@ -86,35 +86,38 @@ io.use((socket, next) => {
   next();
 });
 
-let users = [];
+let userSockets = [];
 io.on("connection", (socket) => {
   socket.onAny((event, ...args) => {
     console.log(event, args);
   });
 
   for (let [id, socket] of io.of("/").sockets) {
-    users = users.filter((u) => u.id !== socket.username);
-    users.push({ id: socket.username, sockeId: socket.id });
+    userSockets = userSockets.filter((u) => u.id !== socket.username);
+    userSockets.push({ id: socket.username, sockeId: socket.id });
   }
+  console.log(userSockets, "userSockets");
 
   socket.on("notification", (nt, to) => {
-    const user = users.filter((u) => u.id == to);
+    const user = userSockets.filter((u) => u.id == to);
 
     user.length > 0 && io.to(user[0].sockeId).emit("notification", nt);
   });
 
   socket.on("disconnect", () => {
     console.log("user: " + socket.id + "desconnect");
-    users = users.filter((u) => u.socketId !== socket.id);
+    userSockets = userSockets.filter((u) => u.socketId !== socket.id);
   });
 
-  socket.emit("users", users);
+  socket.emit("userSockets", userSockets);
 });
 
 app.get("/", (req, res) => {
   res.send("prueba");
 });
-routerApi(app);
+
+console.log(userSockets, "userSockets2");
+routerApi(app, () => userSockets, io);
 
 app.use(logErrors);
 app.use(ormErrorHandler);

@@ -11,7 +11,7 @@ const payRouter = require("./pay.route.js");
 const orderRouter = require("./order.route.js");
 const customerRouter = require("./customer.route.js");
 
-function routerApi(app) {
+function routerApi(app, getUserSockets, io) {
   const router = express.Router();
   app.use("/api/v1", router);
   router.use("/users", usersRouter);
@@ -20,9 +20,9 @@ function routerApi(app) {
   router.use("/category", categoryRouter);
   router.use("/products", productsRouter);
   router.use("/products-store", productsStoreRouter);
-  router.use("/mp", mpRouter);
+  router.use("/mp", mpRouter(getUserSockets, io));
   router.use("/pay", payRouter);
-  router.use("/order", orderRouter);
+  router.use("/order", orderRouter(getUserSockets, io));
   router.use("/customer", customerRouter);
 }
 

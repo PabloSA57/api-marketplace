@@ -6,7 +6,10 @@ const schemas = require("./../schemas/product.schema.js");
 const routerPrivate = require("../middlewares/routePrivate");
 const checkRole = require("./../middlewares/role");
 const { upload, cloudinary } = require("../libs/cloudinary.js");
-const { paramsSchema } = require("../schemas/productStore.schema.js");
+const {
+  paramsSchema,
+  getProductsForIdSchema,
+} = require("../schemas/productStore.schema.js");
 
 const router = express.Router();
 const service = new ProductService();
@@ -75,6 +78,25 @@ router.get(
     const { storeId } = req.params;
     try {
       const products = await service.findProductsInStock(storeId);
+      res.status(200).json(products);
+    } catch (error) {
+      console.log("error");
+      next(error);
+    }
+  }
+);
+
+//getALLProductsForID
+router.post(
+  "/ids",
+  validatorHandler(getProductsForIdSchema, "body"),
+  routerPrivate,
+  checkRole("admin", "client"),
+  async (req, res, next) => {
+    const { productsId } = req.body;
+    console.log(productsId);
+    try {
+      const products = await service.findAll({ id: productsId });
       res.status(200).json(products);
     } catch (error) {
       console.log("error");
