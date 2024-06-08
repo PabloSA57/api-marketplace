@@ -1,4 +1,5 @@
 const algoliasearch = require("algoliasearch");
+const boom = require("@hapi/boom");
 require("dotenv").config();
 
 const { ALGOLIA_API_KEY, ALGOLIA_NAME_APP } = process.env;
@@ -13,7 +14,7 @@ const newStore_ALG = async (record) => {
     return newStore;
   } catch (error) {
     console.log({ algoliaError: error });
-    return error;
+    throw boom.notFound("error");
   }
 };
 

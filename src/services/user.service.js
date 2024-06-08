@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const boom = require("@hapi/boom");
 const models = require("../db/models");
+const { passwordHash, isValidPassword } = require("../libs/bcrypt");
 
 const { User, Customer } = models;
 
@@ -20,19 +21,20 @@ class UserService {
   async register(data) {
     const isUser = await this.find(data.email);
     if (isUser) throw boom.badRequest("Usuario ya registrado");
-    const password = bcrypt.hashSync(data.password, Number.parseInt(10));
+    const password = passwordHash(data.password);
     const user = await User.create({ ...data, password });
 
     if (user.role === "client") {
       await Customer.create({ userId: user.id });
     }
-    return { message: "Se creo correctamente", user };
+    return user;
   }
 
   async login(data) {
     const user = await this.find(data.email);
     if (!user) throw boom.unauthorized("Usuario no registrado");
-    bcrypt.compareSync(data.password, user.password);
+    const a = await isValidPassword(data.password, user.password);
+    if (!a) throw boom.unauthorized("Incorrect Password");
     let token = jwt.sign({ userId: user.id, role: user.role }, "pepe", {
       expiresIn: "24h",
     });

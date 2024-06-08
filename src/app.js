@@ -6,13 +6,14 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const routerApi = require("./routes");
 const crypto = require("crypto");
+require("dotenv").config();
 
 const app = express();
 const server = http.createServer(app);
 const randomId = () => crypto.randomBytes(8).toString("hex");
 const io = sockeIo(server, {
   cors: {
-    origin: ["http://localhost:3000", "https://kisko-app.vercel.app"],
+    origin: [process.env.URL_CLIENT],
     methods: ["GET", "POST", "PUT"],
   },
 });

@@ -15,8 +15,10 @@ router.post(
   async (req, res, next) => {
     try {
       const user = await service.register(req.body);
-      res.status(201).json(user);
+      console.log(user, "user");
+      res.status(201).json({ msg: "User created" });
     } catch (error) {
+      console.log(error, "error");
       next(error);
     }
   }

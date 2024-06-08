@@ -5,11 +5,9 @@ const path = require("path");
 const Sequelize = require("sequelize");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-const prueba = process.env.PRUEBA || "NADA";
-const config = require(__dirname + "/../config.js")[env];
+const config = require(__dirname + "/../config/config.js")[env];
 const db = {};
-console.log(env);
-console.log(prueba);
+
 const options = {
   dialect: "postgres",
   dialectOptions: {
@@ -20,7 +18,7 @@ const options = {
   },
 };
 
-console.log(config.url);
+console.log(config.url, "bgUrl");
 
 let sequelize;
 if (env === "production") {
