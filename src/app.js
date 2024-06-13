@@ -25,7 +25,7 @@ const {
   ormErrorHandler,
 } = require("./middlewares/error.handler");
 
-const allowlist = ["http://localhost:3000", "https://kisko-app.vercel.app"];
+const allowlist = [process.env.URL_CLIENT, "https://kisko-app.vercel.app"];
 
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;

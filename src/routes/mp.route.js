@@ -9,7 +9,7 @@ const router = express.Router();
 const service = new MercadoPagoService();
 
 module.exports = (getUserSockets, io) => {
-  router.get(
+  router.post(
     "/redirect",
     routerPrivate,
     checkRole("seller"),
